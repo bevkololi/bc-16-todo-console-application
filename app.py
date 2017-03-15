@@ -7,8 +7,8 @@ def to_create_todo(new_list):
 	session.add(list_data)
 	session.commit()
 
-to_create_todo("Create github repo")
-to_create_todo("Update github repo")
+#to_create_todo("Create github repo")
+#to_create_todo("Update github repo")
 
 
 def to_open_todo(open_list):
@@ -29,7 +29,7 @@ def to_open_todo(open_list):
 		session.commit()
 
 
-to_open_todo(4)
+#to_open_todo(4)
 
 def to_view_todo():
 	all_lists = session.query(ToDo).options(load_only("list_name"))
@@ -49,7 +49,17 @@ def to_view_items(parent_list):
 	for item in items_to_get:
 		print(item.item_name)
 
-to_view_items(2)
+#to_view_items(2)
+
+def to_delete_todo(del_list):
+	if type(del_list) == str:
+		list_to_del = session.query(ToDo).filter_by(list_name = del_list).first()
+	elif type(open_list) == int:
+		list_to_del = session.query(ToDo).filter_by(id = del_list).first()
+	todo_ref = list_to_del.id
+to_delete_todo("Create github repo")
+
+
 
 
 
