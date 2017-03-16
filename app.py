@@ -59,23 +59,25 @@ class ToDoApp():
 
 	def to_delete_todo(del_list):
 		if type(del_list) == str:
-			list_to_del = session.query(ToDo).filter_by(list_name = del_list).first()
+			list_to_del = session.query(ToDo).filter_by(list_name = del_list).options(load_only("list_name"))
 		elif type(del_list) == int:
-			list_to_del = session.query(ToDo).filter_by(id = del_list).first()
-		session.delete(del_list)
+			list_to_del = session.query(ToDo).filter_by(id = del_list).options(load_only("list_name"))
+		for deleted in list_to_del:
+			print(deleted.list_name)
+		list_to_del.delete()
 		session.commit()
 
-	#to_delete_todo(0)
-			
-			
+	def to_delete_todo(del_list):
+		if type(del_list) == str:
+			list_to_del = session.query(ToDo).filter_by(list_name = del_list).options(load_only("list_name"))
+		elif type(del_list) == int:
+			list_to_del = session.query(ToDo).filter_by(id = del_list).options(load_only("list_name"))
+		for deleted in list_to_del:
+			print(deleted.list_name)
+		list_to_del.delete()
+		session.commit()
 
-		
-	# to_delete_todo()
-
-	# def to_delete_items():
-	# 	del_item = session.query(ToDoItems).options(load_only("item_name"))
-	# 	session.delete(del_item)
-	# 	session.commit()
+	
 			
 	
 

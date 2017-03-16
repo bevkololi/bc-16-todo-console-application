@@ -7,7 +7,7 @@ Usage:
     my_to_do item_add <item_name>
     my_to_do list <all_lists>
     my_to_do list_items <all_items> [--choice=name]
-    my_to_do del <list_name>
+    my_to_do del <list_name><item_name> [--choice=name]
     my_to_do quit
     my_to_do (-i | --interactive)
     my_to_do (-h | --help | --version)
@@ -50,9 +50,12 @@ def pass_opt(func):
     return fn
 
 os.system('cls')
-print("\t****************************************************")
-print("\t***  Save tasks to remember, wherever, whenever!  ***")
-print("\t*****************************************************")
+cprint(figlet_format("\t****************************************************", font='slant', justify = 'centre'),
+        'green', attrs=['bold', 'blink'])
+cprint(figlet_format("\t***  Save tasks to remember, wherever, whenever!  ***", font='slant', justify = 'centre'),
+        'green', attrs=['bold', 'blink'])
+cprint(figlet_format("\t*****************************************************", font='slant', justify = 'centre'),
+        'green', attrs=['bold', 'blink'])
 
 sleep(4)
 
@@ -60,7 +63,7 @@ class ToDoApp(cmd.Cmd):
     """The programs functionalities come here in the end"""
     intro= os.system("cls")
     cprint(figlet_format('Hello, this is your todo list!', font='slant', justify = 'centre'),
-        'red', attrs=['bold', 'blink'])
+        'green', attrs=['bold', 'blink'])
     colored(__doc__)
     cprint("Type help for a list of commands. \n", 'green' )
     prompt = '<<YourTodo>>'
@@ -189,20 +192,30 @@ class ToDoApp(cmd.Cmd):
         except ValueError as e:
             cprint((e), 'red')
 
-    # @pass_opt
-    # def do_list_item(self, arg):
-    #     """
-    #     Adds items in a related todolist.
-    #     Usage:
-    #           list_item <all_items>... 
-        
-    #     """
-    #     try:
-    #         cprint ("Here are your todo items: \n", 'blue')
-    #         app.ToDoApp.to_view_items()
+    @pass_opt
+    def do_del(self, arg):
+        """
+        Finds a task in the todo list and deletes it
+        Usage:
+              del  <list_name>... [--choice=name]
+        """
+        try:
+            del_list = arg["<list_name>"]
+            choice = arg["--choice"]
+            if choice == "name":
+                del_list_str = " ".join(del_list)
+                print(del_list_str)
+            elif choice == "id":
+                del_list_str = int(" ".join(del_list))
+                print (del_list_str)
+            app.ToDoApp.to_delete_todo(del_list_str)
+            print ("List deleted")
 
-    #     except ValueError as e:
-    #         cprint(e, 'red')
+
+            
+        except ValueError as e:
+            cprint((e), 'red')
+
     
     def do_quit(self, arg):
         """Quits out of Interactive Mode."""
