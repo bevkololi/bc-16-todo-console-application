@@ -3,9 +3,11 @@ Todo application
 Todo list commands
 Usage:
     my_to_do todo_create <list_name>
-    my_to_do todo_open <list_param>
+    my_to_do todo_open <list_param> [--choice=name]
     my_to_do item_add <item_name>
-    my_to_do list <list_name><item_name>
+    my_to_do list <all_lists>
+    my_to_do list_item <all_items>
+    my_to_do del <list_name>
     my_to_do quit
     my_to_do (-i | --interactive)
     my_to_do (-h | --help | --version)
@@ -20,6 +22,7 @@ import app
 from docopt import docopt, DocoptExit
 from termcolor import cprint, colored
 from pyfiglet import figlet_format
+from time import sleep
 class DocoptLanguageError(Exception):
     """Error in construction of usage-message by developer."""
 def pass_opt(func):
@@ -45,6 +48,14 @@ def pass_opt(func):
     fn.__doc__ = func.__doc__
     fn.__dict__.update(func.__dict__)
     return fn
+
+os.system('cls')
+print("\t****************************************************")
+print("\t***  Save tasks to remember, wherever, whenever!  ***")
+print("\t*****************************************************")
+
+sleep(4)
+
 class ToDoApp(cmd.Cmd):
     """The programs functionalities come here in the end"""
     intro= os.system("cls")
@@ -76,13 +87,17 @@ class ToDoApp(cmd.Cmd):
         """
         Finds a task in the todo list and opens it, (prints)
         Usage:
-              todo_open <list_param> ["--choice"]
+              todo_open <list_param>... [--choice=name]
         """
         try:
             open_list = arg["<list_param>"]
             choice = arg["--choice"]
-            if open_list_str = " ".join(open_list):
-            print (" " + open_list)
+            if choice == "name":
+                open_list_str = " ".join(open_list)
+                print(open_list_str)
+            elif choice == "id":
+                open_list_str = int(" ".join(open_list))
+                print (open_list_str)
             app.ToDoApp.to_open_todo(open_list_str)
             print ("List opened")
 
@@ -91,6 +106,71 @@ class ToDoApp(cmd.Cmd):
         except ValueError as e:
             cprint((e), 'red')
 
+    @pass_opt
+    def do_add_item(self, arg):
+        """
+        Adds items in a related todolist.
+        Usage:
+              item_add <item_name>... 
+        """
+        try:
+            add_item = arg["<item_name>"]
+            add_item_str = " ".join(add_item)
+            app.ToDoApp.to_add_item(add_item_str, add_item = True)
+            
+
+
+            
+        except ValueError as e:
+            cprint((e), 'red')
+
+    @pass_opt
+    def do_list(self, arg):
+        """
+        Adds items in a related todolist.
+        Usage:
+              list <all_lists>... 
+        
+        """
+        try:
+            cprint ("Here are your todo lists: \n", 'blue')
+            app.ToDoApp.to_view_todo()
+
+        except ValueError as e:
+            cprint(e, 'red')
+
+    @pass_opt
+    def do_del(self, arg):
+        """
+        Adds items in a related todolist.
+        Usage:
+              del <list_name>... 
+        
+        """
+        try:
+            del_list = arg["<list_name>"]
+            del_list_str = " ".join(del_list)           
+            app.ToDoApp.to_delete_todo(del_list_str)
+            cprint ("{} todo list deleted! \n".format(del_list_str), 'blue')
+
+        except ValueError as e:
+            cprint(e, 'red')
+
+    # @pass_opt
+    # def do_list_item(self, arg):
+    #     """
+    #     Adds items in a related todolist.
+    #     Usage:
+    #           list_item <all_items>... 
+        
+    #     """
+    #     try:
+    #         cprint ("Here are your todo items: \n", 'blue')
+    #         app.ToDoApp.to_view_items()
+
+    #     except ValueError as e:
+    #         cprint(e, 'red')
+    
     def do_quit(self, arg):
         """Quits out of Interactive Mode."""
         cprint(('Thankyou for Using this todo Application!'), 'yellow')

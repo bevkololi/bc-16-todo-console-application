@@ -34,7 +34,6 @@ Base = declarative_base()
 class ToDo(Base):  #<------------------------- 
     __tablename__  = "todolists"    
     id             = Column(Integer, primary_key=True) 
-    name           = Column(String(15))
     list_name      = Column(String(50))                                    
     done           = Column(Boolean,default=False)               
          # defaults can be specified as functions
