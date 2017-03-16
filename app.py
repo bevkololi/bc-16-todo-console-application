@@ -38,22 +38,24 @@ class ToDoApp():
 		all_lists = session.query(ToDo).options(load_only("list_name"))
 		for todo in all_lists:
 			print (todo.list_name)
-	to_view_todo()
+	# to_view_todo()
 
 
-		
-	# def to_view_items(parent_list):
-	# 	if type(parent_list) == str:
-	# 		list_to_get = session.query(ToDo).filter_by(list_name = parent_list).first()
-	# 		mother_list_id = list_to_get.id
-	# 		items_to_get = session.query(ToDoItems).filter_by(todo_id = mother_list_id).options(load_only("item_name"))
-	# 	elif type(parent_list) == int:
-	# 		items_to_get = session.query(ToDoItems).filter_by(todo_id = parent_list).options(load_only("item_name"))
-	# 	for item in items_to_get:
-	# 		print(item.item_name)
 
 
-	# to_view_items()
+
+	def to_view_items(parent_list):
+		if type(parent_list) == str:
+			list_to_get = session.query(ToDo).filter_by(list_name = parent_list).first()
+			mother_list_id = list_to_get.id
+			items_to_get = session.query(ToDoItems).filter_by(todo_id = mother_list_id).options(load_only("item_name"))
+		elif type(parent_list) == int:
+			items_to_get = session.query(ToDoItems).filter_by(todo_id = parent_list).options(load_only("item_name"))
+		for item in items_to_get:
+			print(item.item_name)
+
+
+	to_view_items(3)
 
 	def to_delete_todo(del_list):
 		if type(del_list) == str:

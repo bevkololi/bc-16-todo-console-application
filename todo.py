@@ -6,7 +6,7 @@ Usage:
     my_to_do todo_open <list_param> [--choice=name]
     my_to_do item_add <item_name>
     my_to_do list <all_lists>
-    my_to_do list_item <all_items>
+    my_to_do list_items <all_items> [--choice=name]
     my_to_do del <list_name>
     my_to_do quit
     my_to_do (-i | --interactive)
@@ -127,7 +127,7 @@ class ToDoApp(cmd.Cmd):
     @pass_opt
     def do_list(self, arg):
         """
-        Adds items in a related todolist.
+        Gives a list of all main todo tasks
         Usage:
               list <all_lists>... 
         
@@ -140,21 +140,54 @@ class ToDoApp(cmd.Cmd):
             cprint(e, 'red')
 
     @pass_opt
+    def do_list_items(self, arg):
+        """
+        Finds all items in the todo list
+        Usage:
+              list_items <all_items>... [--choice=name]
+        """
+        try:
+            cprint ("These are your items: \n", 'blue')
+            my_items = arg["<all_items>"]
+            choice = arg["--choice"]
+            if choice == "name":
+                my_items_str = " ".join(my_items)
+                print(my_items_str)
+            elif choice == "id":
+                my_items_str = int(" ".join(my_items))
+                print (my_items_str)
+            app.ToDoApp.to_view_items(my_items_str)
+            
+
+
+            
+        except ValueError as e:
+            cprint((e), 'red')
+
+
+    @pass_opt
     def do_del(self, arg):
         """
-        Adds items in a related todolist.
+        Finds a task in the todo list and deletes it
         Usage:
-              del <list_name>... 
-        
+              del  <list_name>... [--choice=name]
         """
         try:
             del_list = arg["<list_name>"]
-            del_list_str = " ".join(del_list)           
+            choice = arg["--choice"]
+            if choice == "name":
+                del_list_str = " ".join(del_list)
+                print(del_list_str)
+            elif choice == "id":
+                del_list_str = int(" ".join(del_list))
+                print (del_list_str)
             app.ToDoApp.to_delete_todo(del_list_str)
-            cprint ("{} todo list deleted! \n".format(del_list_str), 'blue')
+            print ("List deleted")
 
+
+            
         except ValueError as e:
-            cprint(e, 'red')
+            cprint((e), 'red')
 
     # @pass_opt
     # def do_list_item(self, arg):
