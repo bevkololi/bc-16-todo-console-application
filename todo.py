@@ -7,7 +7,8 @@ Usage:
     my_to_do item_add <item_name>
     my_to_do list <all_lists>
     my_to_do list_items <all_items> [--choice=name]
-    my_to_do del <list_name><item_name> [--choice=name]
+    my_to_do del <list_name> [--choice=name]
+    my_to_do del_item <item_name> [--choice=name]
     my_to_do quit
     my_to_do (-i | --interactive)
     my_to_do (-h | --help | --version)
@@ -23,6 +24,11 @@ from docopt import docopt, DocoptExit
 from termcolor import cprint, colored
 from pyfiglet import figlet_format
 from time import sleep
+from prettytable import PrettyTable
+import random
+
+
+
 class DocoptLanguageError(Exception):
     """Error in construction of usage-message by developer."""
 def pass_opt(func):
@@ -57,7 +63,7 @@ cprint(figlet_format("\t***  Save tasks to remember, wherever, whenever!  ***", 
 cprint(figlet_format("\t*****************************************************", font='slant', justify = 'centre'),
         'green', attrs=['bold', 'blink'])
 
-sleep(4)
+sleep(1)
 
 class ToDoApp(cmd.Cmd):
     """The programs functionalities come here in the end"""
@@ -80,8 +86,7 @@ class ToDoApp(cmd.Cmd):
             my_list = arg["<list_name>"]
             my_list_str = " ".join(my_list)           
             app.ToDoApp.to_create_todo(my_list_str)
-            cprint ("{} todo list created! \n".format(my_list_str), 'blue')
-
+            
         except ValueError as e:
             cprint(e, 'red')
     
@@ -102,15 +107,13 @@ class ToDoApp(cmd.Cmd):
                 open_list_str = int(" ".join(open_list))
                 print (open_list_str)
             app.ToDoApp.to_open_todo(open_list_str)
-            print ("List opened")
-
-
+            
             
         except ValueError as e:
             cprint((e), 'red')
 
     @pass_opt
-    def do_add_item(self, arg):
+    def do_item_add(self, arg):
         """
         Adds items in a related todolist.
         Usage:
@@ -193,23 +196,23 @@ class ToDoApp(cmd.Cmd):
             cprint((e), 'red')
 
     @pass_opt
-    def do_del(self, arg):
+    def do_del_item(self, arg):
         """
-        Finds a task in the todo list and deletes it
+        Finds an item in the todo list and deletes it
         Usage:
-              del  <list_name>... [--choice=name]
+              del_item  <list_name>... [--choice=name]
         """
         try:
-            del_list = arg["<list_name>"]
+            del_item = arg["<list_name>"]
             choice = arg["--choice"]
             if choice == "name":
-                del_list_str = " ".join(del_list)
-                print(del_list_str)
+                del_item_str = " ".join(del_item)
+                print(del_item_str)
             elif choice == "id":
-                del_list_str = int(" ".join(del_list))
-                print (del_list_str)
-            app.ToDoApp.to_delete_todo(del_list_str)
-            print ("List deleted")
+                del_item_str = int(" ".join(del_item))
+                print (del_item_str)
+            app.ToDoApp.to_delete_item(del_item_str)
+            print ("Item deleted")
 
 
             
